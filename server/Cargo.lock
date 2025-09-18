@@ -37,10 +37,13 @@ name = "auth0-user-gatekeeper"
 version = "0.0.1"
 dependencies = [
  "axum",
+ "http",
  "serde",
+ "serde_json",
  "serde_yaml",
  "tempfile",
  "tokio",
+ "tower",
  "validator",
 ]
 
