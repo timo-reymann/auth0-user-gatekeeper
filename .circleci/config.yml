@@ -4,6 +4,8 @@ job_defaults: &job_defaults
   filters:
     tags:
       only: /.*/
+    branches:
+      only: /.*/
 
 orbs:
   rust: circleci/rust@1.8.0
