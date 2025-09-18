@@ -42,7 +42,7 @@ jobs:
           command: |
             cd server
             cargo test -- --nocapture
-            mkdir -p server/test-results
+            mkdir -p test-results
             cargo2junit > test-results/junit.xml
             cargo tarpaulin --out Xml --output-dir ./coverage
       - store_test_results:
