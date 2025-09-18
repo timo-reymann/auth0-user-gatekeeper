@@ -20,11 +20,11 @@ commands:
   save_rust_cache:
     steps:
       - save_cache:
-        key: cargo-cache-{{ checksum "server/Cargo.lock" }}
-        paths:
-          - /usr/local/cargo/registry
-          - server/target/debug
-          - server/target/release
+          key: cargo-cache-{{ checksum "server/Cargo.lock" }}
+          paths:
+            - /usr/local/cargo/registry
+            - server/target/debug
+            - server/target/release
 
 jobs:
   test:
