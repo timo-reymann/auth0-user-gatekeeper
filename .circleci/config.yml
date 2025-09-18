@@ -9,6 +9,7 @@ job_defaults: &job_defaults
 
 orbs:
   rust: circleci/rust@1.8.0
+  codecov: codecov/codecov@5.4.3
 
 command:
   restore_rust_cache:
