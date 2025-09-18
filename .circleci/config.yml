@@ -38,14 +38,13 @@ jobs:
             cargo install cargo-tarpaulin --version 0.32.8
             cargo install cargo2junit --version 0.1.14
       - run:
-          name: Run tests and generate JUnit report
+          name: Run tests and generate test reports
           command: |
+            cd server
             cargo test -- --nocapture
             mkdir -p server/test-results
-            cargo2junit > server/test-results/junit.xml
-      - run:
-          name: Run tests with coverage
-          command: cargo tarpaulin --out Xml --output-dir ./coverage
+            cargo2junit > test-results/junit.xml
+            cargo tarpaulin --out Xml --output-dir ./coverage
       - store_test_results:
           path: server/test-results
       - codecov/upload
