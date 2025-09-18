@@ -35,7 +35,7 @@ jobs:
       - run:
           name: Install cargo-tarpaulin
           command: |
-            RUSTFLAGS="--cfg procmacro2_semver_exemptcargo" install cargo-tarpaulin --version 0.32.8
+            RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin --version 0.32.8
             cargo install cargo2junit --version 0.1.14
       - run:
           name: Run tests and generate test reports
