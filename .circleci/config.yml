@@ -22,7 +22,7 @@ commands:
       - save_cache:
           key: cargo-cache-{{ checksum "server/Cargo.lock" }}
           paths:
-            - /usr/local/cargo/registry
+            - ~/.cargo
             - server/target/debug
             - server/target/release
 
