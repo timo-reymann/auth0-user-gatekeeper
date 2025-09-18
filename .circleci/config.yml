@@ -50,7 +50,9 @@ jobs:
           file: ./coverage/cobertura.xml
       - save_rust_cache
 
-main:
-  jobs:
-    - test:
-        <<: *job_defaults
+workflows:
+  version: 2
+  main:
+    jobs:
+      - test:
+          <<: *job_defaults
