@@ -11,7 +11,7 @@ orbs:
   rust: circleci/rust@1.8.0
   codecov: codecov/codecov@5.4.3
 
-command:
+commands:
   restore_rust_cache:
     steps:
       - restore_cache:
