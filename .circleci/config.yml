@@ -47,8 +47,7 @@ jobs:
           command: cargo tarpaulin --out Xml --output-dir ./coverage
       - store_test_results:
           path: server/test-results
-      - codecov/upload:
-          file: ./coverage/cobertura.xml
+      - codecov/upload
       - save_rust_cache
 
 workflows:
