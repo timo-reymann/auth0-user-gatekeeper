@@ -43,7 +43,7 @@ jobs:
             cd server
             mkdir -p test-results
             RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time | cargo2junit > test-results/junit.xml
-            cargo tarpaulin --out Xml --output-dir ./coverage --no-fail-fast
+            cargo tarpaulin --out Xml --output-dir ./coverage --no-fail-fast --engine Llvm
       - store_test_results:
           path: server/test-results
       - codecov/upload
