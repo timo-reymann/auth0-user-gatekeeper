@@ -1,0 +1,54 @@
+version: 2.1
+
+job_defaults: &job_defaults
+  filters:
+    tags:
+      only: /.*/
+
+orbs:
+  rust: circleci/rust@1.8.0
+
+command:
+  restore_rust_cache:
+    steps:
+      - restore_cache:
+          keys:
+            - cargo-cache-{{ checksum "server/Cargo.lock" }}
+  save_rust_cache:
+    steps:
+      - save_cache:
+        key: cargo-cache-{{ checksum "server/Cargo.lock" }}
+        paths:
+          - /usr/local/cargo/registry
+          - server/target/debug
+          - server/target/release
+
+jobs:
+  test:
+    executor: rust/default
+    steps:
+      - checkout
+      - run:
+          name: Install cargo-tarpaulin
+          command: |
+            cargo install cargo-tarpaulin --version 0.32.8
+            cargo install cargo2junit --version 0.1.14
+      - run:
+          name: Run tests and generate JUnit report
+          command: |
+            cargo test -- --nocapture
+            mkdir -p server/test-results
+            cargo2junit > server/test-results/junit.xml
+      - run:
+          name: Run tests with coverage
+          command: cargo tarpaulin --out Xml --output-dir ./coverage
+      - store_test_results:
+          path: server/test-results
+      - codecov/upload:
+          file: ./coverage/cobertura.xml
+      - save_rust_cache
+
+main:
+  jobs:
+    - test:
+        <<: *job_defaults
