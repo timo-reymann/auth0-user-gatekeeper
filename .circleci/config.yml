@@ -8,7 +8,6 @@ job_defaults: &job_defaults
       only: /.*/
 
 orbs:
-  rust: circleci/rust@1.8.0
   codecov: codecov/codecov@5.4.3
 
 commands:
@@ -28,7 +27,8 @@ commands:
 
 jobs:
   test:
-    executor: rust/default
+    docker:
+      - image: cimg/rust:1.89.0
     steps:
       - checkout
       - restore_rust_cache
