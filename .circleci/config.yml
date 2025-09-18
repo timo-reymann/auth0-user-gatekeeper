@@ -41,9 +41,8 @@ jobs:
           name: Run tests and generate test reports
           command: |
             cd server
-            cargo test -- --nocapture
             mkdir -p test-results
-            cargo2junit > test-results/junit.xml
+            RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time | cargo2junit > test-results/junit.xml
             cargo tarpaulin --out Xml --output-dir ./coverage
       - store_test_results:
           path: server/test-results
