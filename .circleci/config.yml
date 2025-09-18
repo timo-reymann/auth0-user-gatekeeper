@@ -33,9 +33,8 @@ jobs:
       - checkout
       - restore_rust_cache
       - run:
-          name: Install cargo-tarpaulin
+          name: Install cargo tools
           command: |
-            RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin --version 0.32.8
             cargo install cargo2junit --version 0.1.14
       - run:
           name: Run tests and generate test reports
@@ -43,7 +42,6 @@ jobs:
             cd server
             mkdir -p test-results
             RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time | cargo2junit > test-results/junit.xml
-            cargo tarpaulin --out Xml --output-dir ./coverage
       - store_test_results:
           path: server/test-results
       - codecov/upload
