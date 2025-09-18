@@ -31,6 +31,7 @@ jobs:
     executor: rust/default
     steps:
       - checkout
+      - restore_rust_cache
       - run:
           name: Install cargo-tarpaulin
           command: |
