@@ -74,7 +74,7 @@ jobs:
           name: Install cargo tools
           command: |
             TARPAULIN_VERSION="0.32.8"
-            curl https://github.com/xd009642/tarpaulin/releases/download/${TARPAULIN_VERSION}/cargo-tarpaulin-aarch64-unknown-linux-musl.tar.gz -o /tmp/cargo-tarpaulin.tar.gz
+            curl -L https://github.com/xd009642/tarpaulin/releases/download/${TARPAULIN_VERSION}/cargo-tarpaulin-x86_64-unknown-linux-musl.tar.gz -o /tmp/cargo-tarpaulin.tar.gz
             tar -xvzf /tmp/cargo-tarpaulin.tar.gz -C /tmp
             sudo mv /tmp/cargo-tarpaulin /usr/local/bin/cargo-tarpaulin
             
