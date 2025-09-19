@@ -179,7 +179,7 @@ jobs:
           name: Publish
           command: |
             cd node-lib
-            echo 'npmAuthToken: "${NPM_TOKEN}"' > .yarnrc.yml
+            echo 'npmAuthToken: "${NPM_TOKEN}"' >> .yarnrc.yml
             yarn npm publish --access public
 
 workflows:
