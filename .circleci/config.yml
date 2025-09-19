@@ -90,9 +90,10 @@ jobs:
             echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker buildx create --use
             export BUILDKIT_PROGRESS=plain
+            cd server/
             docker buildx build . \
               -t timoreymann/auth0-user-gatekeeper:latest \
-              -f server/Dockerfile \
+              -f Dockerfile \
               --platform linux/amd64,linux/arm64 \
               <<parameters.buildx_extra_args>>
   test:
