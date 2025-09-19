@@ -29,7 +29,7 @@ async fn check_allowed_by_mail(
 
     // Invalid mail
     if payload.validate().is_err() {
-        return (StatusCode::BAD_REQUEST, "Invalid email format").into_response();
+        return (StatusCode::BAD_REQUEST, "invalid_email_format").into_response();
     }
 
     // Email is explicitly allowed
@@ -159,7 +159,7 @@ mod tests {
     async fn it_returns_400_on_invalid_email_format() {
         let (status, body) = call_is_allowed("not-an-email", Some("Bearer secret")).await;
         assert_eq!(status, StatusCode::BAD_REQUEST);
-        assert_eq!(body, "Invalid email format");
+        assert_eq!(body, "invalid_email_format");
     }
 
     #[tokio::test]

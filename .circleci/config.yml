@@ -17,6 +17,7 @@ job_only_tags: &job_only_tags
 orbs:
   codecov: codecov/codecov@5.4.3
   docker: circleci/docker@2.8.2
+  node: circleci/node@7.2.0
 
 commands:
   restore_rust_cache:
@@ -97,7 +98,7 @@ jobs:
               -f Dockerfile \
               --platform linux/amd64,linux/arm64 \
               <<parameters.buildx_extra_args>>
-  test:
+  test-server:
     docker:
       - image: cimg/rust:1.89.0
     steps:
@@ -135,11 +136,44 @@ jobs:
           command: |
             sccache --show-stats
 
+  test-node-lib:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+          app-dir: node-lib
+      - run:
+          name: Run tests
+          command: |
+            yarn test \
+              --no-watch \
+              --reporter junit \
+              --outputFile test-results/junit.xml \
+              --coverage \
+              --coverage.reporter clover
+      - codecov/upload
+      - store_test_results:
+          path: node-lib/test-results
+  build-node-lib:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+          app-dir: node-lib
+      - run:
+          name: Build
+          command: |
+            yarn build
+
 workflows:
   version: 2
   main:
     jobs:
-      - test:
+      - test-node-lib:
+          <<: *job_defaults
+      - test-server:
           <<: *job_defaults
       - build-server-container:
           name: build-server-container-no-push

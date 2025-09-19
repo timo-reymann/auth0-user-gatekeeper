@@ -1,0 +1,20 @@
+{
+  "name": "auth0-user-gatekeeper",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
