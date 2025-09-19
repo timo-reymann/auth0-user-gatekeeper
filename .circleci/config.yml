@@ -84,6 +84,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: default
+          docker_layer_caching: true
       - run:
           name: Build and publish image
           command: |
