@@ -179,7 +179,11 @@ workflows:
           name: build-server-container-no-push
           <<: *job_defaults
           requires:
-            - test
+            - test-server
+      - build-node-lib:
+          <<: *job_defaults
+          requires:
+            - test-node-lib
   release:
     jobs:
       - build-server-container:
