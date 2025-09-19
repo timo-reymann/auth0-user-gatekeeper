@@ -65,6 +65,10 @@ jobs:
       - checkout
       - install_sccache
       - restore_sccache
+      - run:
+          name: Show sccache stats
+          command: |
+            sccache --show-stats
       - restore_rust_cache
       - run:
           name: Install cargo tools
@@ -83,6 +87,10 @@ jobs:
           path: server/test-results
       - codecov/upload
       - save_rust_cache
+      - run:
+          name: Show sccache stats
+          command: |
+            sccache --show-stats
 
 workflows:
   version: 2
