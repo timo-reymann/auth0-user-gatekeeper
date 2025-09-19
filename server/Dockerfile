@@ -1,6 +1,7 @@
 FROM rust:1.90-bookworm AS builder
 
 ARG SCCACHE_VERSION=0.10.0
+ENV SCCACHE_DIR=/root/.cache/sccache
 RUN curl -L "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/sccache-archive.tar.gz \
     && tar -xvzf /tmp/sccache-archive.tar.gz -C /tmp \
     && mv /tmp/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl/sccache /usr/local/bin/sccache
