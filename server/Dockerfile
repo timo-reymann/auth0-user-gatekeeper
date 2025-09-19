@@ -16,7 +16,9 @@ RUN --mount=type=cache,target=/root/.cargo,id=cargo \
 
 COPY . ./
 RUN --mount=type=cache,target=/root/.cache/sccache,id=sccache \
-    cargo build --release
+    sccache --start-server && \
+    cargo build --release && \
+    sccache --stop-server
 
 FROM cgr.dev/chainguard/wolfi-base
 RUN adduser -D server \
