@@ -27,14 +27,14 @@ commands:
   save_sccache:
     steps:
       - save_cache:
-          key: sccache-v1
+          key: sccache-v1-{{ checksum "server/Cargo.lock" }}
           paths:
             - ~/.cache/sccache
   restore_sccache:
     steps:
       - restore_cache:
           keys:
-            - sccache-v1
+            - sccache-v1-{{ checksum "server/Cargo.lock" }}
   install_sccache:
     parameters:
       version:
