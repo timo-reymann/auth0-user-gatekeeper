@@ -1,8 +1,10 @@
 FROM rust:1.90-bookworm AS builder
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends sccache && \
-    rm -rf /var/lib/apt/lists/*
+ARG SCCACHE_VERSION=0.10.0
+RUN curl -L "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/sccache-archive.tar.gz \
+    && tar -xvzf /tmp/sccache-archive.tar.gz -C /tmp \
+    && mv /tmp/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl/sccache /usr/local/bin/sccache
+
 ENV RUSTC_WRAPPER=sccache
 
 WORKDIR /usr/src/app
