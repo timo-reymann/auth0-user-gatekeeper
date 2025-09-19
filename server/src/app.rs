@@ -49,6 +49,7 @@ async fn check_allowed_by_mail(
 
 #[cfg(test)]
 mod tests {
+    use axum::body;
     use super::*;
     use tower::ServiceExt; // for `oneshot`
     use http::{Request, StatusCode};
@@ -109,5 +110,83 @@ mod tests {
 
         let response = app.oneshot(request).await.unwrap();
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    fn app_with_config() -> Router {
+        let cfg = Config {
+            allowed_domains: vec!["allowed.com".into(), "example.com".into()],
+            allowed_mails: vec!["special@allowed.com".into(), "exact@other.org".into()],
+            token: "secret".into(),
+        };
+        create_app(cfg)
+    }
+
+    async fn call_is_allowed(email: &str, token: Option<&str>) -> (StatusCode, String) {
+        let app = app_with_config();
+        let mut req = Request::builder()
+            .method("POST")
+            .uri("/isAllowed")
+            .header("content-type", "application/json");
+
+        if let Some(t) = token {
+            req = req.header("authorization", t);
+        }
+
+        let request_body = json!({ "email": email }).to_string();
+        let response = app.oneshot(req.body(request_body).unwrap()).await.unwrap();
+        let status = response.status();
+
+        let bytes = body::to_bytes(response.into_body(), 64 * 1024).await.unwrap();
+        let body_str = String::from_utf8(bytes.to_vec()).unwrap();
+        (status, body_str)
+    }
+
+    #[tokio::test]
+    async fn it_returns_401_when_no_token() {
+        let (status, body) = call_is_allowed("user@allowed.com", None).await;
+        assert_eq!(status, StatusCode::UNAUTHORIZED);
+        assert_eq!(body, "no_token");
+    }
+
+    #[tokio::test]
+    async fn it_returns_401_when_invalid_token() {
+        let (status, body) = call_is_allowed("user@allowed.com", Some("Bearer wrong")).await;
+        assert_eq!(status, StatusCode::UNAUTHORIZED);
+        assert_eq!(body, "invalid_token");
+    }
+
+    #[tokio::test]
+    async fn it_returns_400_on_invalid_email_format() {
+        let (status, body) = call_is_allowed("not-an-email", Some("Bearer secret")).await;
+        assert_eq!(status, StatusCode::BAD_REQUEST);
+        assert_eq!(body, "Invalid email format");
+    }
+
+    #[tokio::test]
+    async fn it_returns_ok_when_email_explicitly_allowed() {
+        let (status, body) = call_is_allowed("special@allowed.com", Some("Bearer secret")).await;
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(body, "email_allowed");
+    }
+
+    #[tokio::test]
+    async fn it_returns_ok_when_domain_allowed() {
+        let (status, body) = call_is_allowed("someone@allowed.com", Some("Bearer secret")).await;
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(body, "domain_allowed");
+    }
+
+    #[tokio::test]
+    async fn it_is_case_insensitive_for_domain() {
+        let (status, body) = call_is_allowed("MiXeD@AlLoWeD.CoM", Some("Bearer secret")).await;
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(body, "domain_allowed");
+    }
+
+    #[tokio::test]
+    async fn it_returns_403_when_not_allowed() {
+        let (status, body) = call_is_allowed("nobody@blocked.net", Some("Bearer secret")).await;
+        assert_eq!(status, StatusCode::FORBIDDEN);
+        assert_eq!(body, "not_allowed");
     }
 }
