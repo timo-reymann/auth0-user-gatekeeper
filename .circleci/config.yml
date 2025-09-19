@@ -39,16 +39,14 @@ commands:
     parameters:
       version:
         type: string
-        default: "0.7.4"
+        default: "0.10.0"
     steps:
       - run:
           name: Install sccache
           command: |
-            PLATFORM="linux-x86_64"
             SCCACHE_VERSION="<<parameters.version>>"
-            
-            # Download sccache from GitHub Releases
-            curl -L "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/sccache-v${SCCACHE_VERSION}-${PLATFORM}" -o /tmp/sccache
+
+            curl -L "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/sccache
             chmod +x /tmp/sccache
             sudo mv /tmp/sccache /usr/local/bin/sccache
             
