@@ -51,8 +51,7 @@ commands:
             sudo mv /tmp/sccache-v${SCCACHE_VERSION}-x86_64-unknown-linux-musl/sccache /usr/local/bin/sccache
             
             # Set environment variables for sccache
-            echo 'export RCCACHE_DIR="/tmp/sccache"' >> $BASH_ENV
-            echo 'export RCCACHE_SLOPPINESS="time,file_macro,include_file"' >> $BASH_ENV
+            echo 'export RUSTC_WRAPPER=sccache"' >> $BASH_ENV
             source $BASH_ENV
             
             # Verify installation
