@@ -9,7 +9,7 @@ pub(crate) struct Args {
     #[arg(long, default_value = "2025")]
     port: u16,
     #[arg(long, default_value = "config.yaml")]
-    config: String
+    config: String,
 }
 
 pub async fn run(args: Args) -> i32 {
@@ -34,9 +34,7 @@ pub async fn run(args: Args) -> i32 {
 
     println!("Server listening on {}", addr);
     match axum::serve(socket, app.into_make_service()).await {
-        Ok(_) => {
-            0
-        }
+        Ok(_) => 0,
         Err(e) => {
             println!("Failed to serve {}", e);
             1
@@ -47,11 +45,9 @@ pub async fn run(args: Args) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use http::StatusCode;
     use std::net::TcpListener;
     use tokio::task::JoinHandle;
-    use http::{Request, StatusCode};
-    use tower::ServiceExt;
-    use axum::body;
 
     // Helper to pick a free port
     fn free_port() -> u16 {
@@ -83,9 +79,9 @@ mod tests {
     // Verifies the server responds to /isAllowed using the configured port without adding new deps.
     #[tokio::test]
     async fn server_smoke_test_is_allowed() {
+        use axum::body;
         use http::{Request as HttpRequest, StatusCode};
         use tower::ServiceExt; // oneshot
-        use axum::body;
 
         let port = free_port();
         let token = "smoke-token";
