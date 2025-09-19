@@ -168,6 +168,19 @@ jobs:
           command: |
             cd node-lib
             yarn build
+  publish-node-lib:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn-berry
+          app-dir: node-lib
+      - run:
+          name: Publish
+          command: |
+            cd node-lib
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+            yarn publish --access public
 
 workflows:
   version: 2
@@ -205,4 +218,8 @@ workflows:
             -t timoreymann/auth0-user-gatekeeper:${CIRCLE_TAG} \
             --push
       - update-dockerhub-readme:
+          requires:
+            - build-server-container-push
+          <<: *job_only_tags
+      - publish-node-lib:
           <<: *job_only_tags

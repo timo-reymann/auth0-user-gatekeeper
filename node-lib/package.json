@@ -2,6 +2,16 @@
   "name": "auth0-user-gatekeeper",
   "private": true,
   "version": "1.0.1",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist/"],
   "type": "module",
   "scripts": {
     "build": "tsup src/index.ts",
