@@ -45,7 +45,6 @@ pub async fn run(args: Args) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use http::StatusCode;
     use std::net::TcpListener;
     use tokio::task::JoinHandle;
 
