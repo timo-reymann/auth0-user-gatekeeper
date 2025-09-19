@@ -73,7 +73,8 @@ jobs:
       - run:
           name: Install cargo tools
           command: |
-            cargo install cargo2junit --version 0.1.14
+            curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+            cargo binstall cargo2junit --version 0.1.14
             cargo install cargo-tarpaulin --version 0.32.8
       - run:
           name: Run tests and generate test reports
