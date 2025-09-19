@@ -1,7 +1,7 @@
 {
   "name": "auth0-user-gatekeeper",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "build": "tsup src/index.ts",
