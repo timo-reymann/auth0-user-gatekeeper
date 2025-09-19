@@ -146,6 +146,7 @@ jobs:
       - run:
           name: Run tests
           command: |
+            cd node-lib
             yarn test \
               --no-watch \
               --reporter junit \
@@ -165,6 +166,7 @@ jobs:
       - run:
           name: Build
           command: |
+            cd node-lib
             yarn build
 
 workflows:
