@@ -18,6 +18,7 @@ orbs:
   codecov: codecov/codecov@5.4.3
   docker: circleci/docker@2.8.2
   node: circleci/node@7.2.0
+  semantic-release: trustedshops-public/semantic-release@6.0.0
 
 commands:
   restore_rust_cache:
@@ -185,6 +186,16 @@ workflows:
           <<: *job_defaults
           requires:
             - test-node-lib
+      - semantic-release/with_existing_config:
+          name: semantic-release
+          additional_packages: "@google/semantic-release-replace-plugin"
+          requires:
+            - build-node-lib
+            - build-server-container
+          filters:
+            branches:
+              only:
+                - main
   release:
     jobs:
       - build-server-container:
