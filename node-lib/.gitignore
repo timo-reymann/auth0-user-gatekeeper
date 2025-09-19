@@ -1,2 +1,6 @@
-.yarn/
+.yarn/*
+!.yarn/releases
 .pnp*
+coverage/
+test-results/
+dist/
