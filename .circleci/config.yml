@@ -192,6 +192,8 @@ workflows:
           <<: *job_defaults
       - build-server-container:
           name: build-server-container-no-push
+          buildx_extra_args: |
+            --load
           <<: *job_defaults
           requires:
             - test-server
