@@ -141,12 +141,14 @@ workflows:
       - test:
           <<: *job_defaults
       - build-server-container:
+          name: build-server-container-no-push
           <<: *job_defaults
           requires:
             - test
   release:
     jobs:
       - build-server-container:
+          name: build-server-container-push
           <<: *job_only_tags
           buildx_extra_args: |
             -t timoreymann/auth0-user-gatekeeper:${CIRCLE_TAG} \
