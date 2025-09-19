@@ -141,6 +141,8 @@ workflows:
           <<: *job_defaults
       - build-server-container:
           <<: *job_defaults
+          requires:
+            - test
   release:
     jobs:
       - build-server-container:
