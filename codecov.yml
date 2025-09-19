@@ -1,0 +1,7 @@
+coverage:
+  precision: 2
+  round: down
+  range: "50...75"
+ignore:
+  # not really testable, but also simple enough
+  - "server/src/main.rs"
