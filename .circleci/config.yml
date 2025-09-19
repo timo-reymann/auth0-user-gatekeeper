@@ -95,7 +95,7 @@ jobs:
             docker buildx build . \
               -t timoreymann/auth0-user-gatekeeper:latest \
               -f Dockerfile \
-              --platform linux/amd64,linux/arm64 \
+              --platform linux/amd64 \
               <<parameters.buildx_extra_args>>
   test-server:
     docker:
