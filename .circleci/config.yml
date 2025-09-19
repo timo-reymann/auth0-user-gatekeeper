@@ -191,7 +191,7 @@ workflows:
           additional_packages: "@google/semantic-release-replace-plugin"
           requires:
             - build-node-lib
-            - build-server-container
+            - build-server-container-no-push
           filters:
             branches:
               only:
