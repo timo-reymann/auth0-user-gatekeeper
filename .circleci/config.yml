@@ -67,7 +67,7 @@ commands:
             sccache --version
 
 jobs:
-  "update-dockerhub-readme":
+  update-dockerhub-readme:
     executor: docker/docker
     steps:
       - checkout
@@ -75,19 +75,18 @@ jobs:
           image: timoreymann/auth0-user-gatekeeper
           docker-username: DOCKER_USERNAME
           docker-password: DOCKER_TOKEN
-  "build-server-container":
+  build-server-container:
     parameters:
       buildx_extra_args:
         type: string
         default: ""
-    executor: docker/docker
+    executor:
+      name: docker/machine
+      dlc: true
     steps:
       - checkout
-      - setup_remote_docker:
-          version: default
-          docker_layer_caching: true
       - run:
-          name: Build and publish image
+          name: Build image
           command: |
             echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker buildx create --use
