@@ -141,7 +141,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
+          pkg-manager: yarn-berry
           app-dir: node-lib
       - run:
           name: Run tests
@@ -160,7 +160,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
+          pkg-manager: yarn-berry
           app-dir: node-lib
       - run:
           name: Build
