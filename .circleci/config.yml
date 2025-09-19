@@ -151,3 +151,5 @@ workflows:
           buildx_extra_args: |
             -t timoreymann/auth0-user-gatekeeper:${CIRCLE_TAG} \
             --push
+      - update-dockerhub-readme:
+          <<: *job_only_tags
