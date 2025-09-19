@@ -4,6 +4,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends sccache && \
     rm -rf /var/lib/apt/lists/*
 ENV RUSTC_WRAPPER=sccache
+ENV SCCACHE_START_SERVER=0
 
 WORKDIR /usr/src/app
 
@@ -16,9 +17,7 @@ RUN --mount=type=cache,target=/root/.cargo,id=cargo \
 
 COPY . ./
 RUN --mount=type=cache,target=/root/.cache/sccache,id=sccache \
-    sccache --start-server && \
-    cargo build --release && \
-    sccache --stop-server
+    cargo build --release
 
 FROM cgr.dev/chainguard/wolfi-base
 RUN adduser -D server \
