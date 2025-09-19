@@ -27,7 +27,7 @@ commands:
   save_sccache:
     steps:
       - save_cache:
-          key: sccache-cache-stable-{{ arch }}-{{ .Environment.CIRCLE_JOB }}
+          key: sccache-cache-stable-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ epoch }}
           paths:
             - ~/.cache/sccache
   restore_sccache:
