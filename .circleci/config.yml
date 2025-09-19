@@ -3,12 +3,20 @@ version: 2.1
 job_defaults: &job_defaults
   filters:
     tags:
-      only: /.*/
+      ignore: /.*/
     branches:
       only: /.*/
 
+job_only_tags: &job_only_tags
+  filters:
+    tags:
+      only: /.*/
+    branches:
+      ignore: /.*/
+
 orbs:
   codecov: codecov/codecov@5.4.3
+  docker: circleci/docker@2.8.2
 
 commands:
   restore_rust_cache:
@@ -58,6 +66,26 @@ commands:
             sccache --version
 
 jobs:
+  "build-server-container":
+    parameters:
+      buildx_extra_args:
+        type: string
+    executor: docker/docker
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: default
+      - run:
+          name: Build and publish image
+          command: |
+            echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker buildx create --use
+            export BUILDKIT_PROGRESS=plain
+            docker buildx build . \
+              -t timoreymann/auth0-user-gatekeeper:latest \
+              -f server/Dockerfile \
+              --platform linux/amd64,linux/arm64 \
+              <<parameters.buildx_extra_args>>
   test:
     docker:
       - image: cimg/rust:1.89.0
@@ -102,3 +130,12 @@ workflows:
     jobs:
       - test:
           <<: *job_defaults
+      - build-server-container:
+          <<: *job_defaults
+  release:
+    jobs:
+      - build-server-container:
+          <<: *job_only_tags
+          buildx_extra_args: |
+            -t timoreymann/auth0-user-gatekeeper:${CIRCLE_TAG} \
+            --push
