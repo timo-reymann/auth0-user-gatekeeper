@@ -66,10 +66,19 @@ commands:
             sccache --version
 
 jobs:
+  "update-dockerhub-readme":
+    executor: docker/docker
+    steps:
+      - checkout
+      - docker/update-description:
+          image: timoreymann/auth0-user-gatekeeper
+          docker-username: DOCKER_USERNAME
+          docker-password: DOCKER_TOKEN
   "build-server-container":
     parameters:
       buildx_extra_args:
         type: string
+        default: ""
     executor: docker/docker
     steps:
       - checkout
