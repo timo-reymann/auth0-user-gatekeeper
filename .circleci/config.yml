@@ -24,6 +24,41 @@ commands:
             - ~/.cargo
             - server/target/debug
             - server/target/release
+  save_sccache:
+    steps:
+      - save_cache:
+          key: sccache-v1
+          paths:
+            - ~/.cache/sccache
+  restore_sccache:
+    steps:
+      - restore_cache:
+          keys:
+            - sccache-v1
+  install_sccache:
+    parameters:
+      version:
+        type: string
+        default: "0.7.4"
+    steps:
+      - run:
+          name: Install sccache
+          command: |
+            PLATFORM="linux-x86_64"
+            SCCACHE_VERSION="<<parameters.version>>"
+            
+            # Download sccache from GitHub Releases
+            curl -L "https://github.com/mozilla/sccache/releases/download/v${SCCACHE_VERSION}/sccache-v${SCCACHE_VERSION}-${PLATFORM}" -o /tmp/sccache
+            chmod +x /tmp/sccache
+            sudo mv /tmp/sccache /usr/local/bin/sccache
+            
+            # Set environment variables for sccache
+            echo 'export RCCACHE_DIR="/tmp/sccache"' >> $BASH_ENV
+            echo 'export RCCACHE_SLOPPINESS="time,file_macro,include_file"' >> $BASH_ENV
+            source $BASH_ENV
+            
+            # Verify installation
+            sccache --version
 
 jobs:
   test:
@@ -31,6 +66,8 @@ jobs:
       - image: cimg/rust:1.89.0
     steps:
       - checkout
+      - install_sccache
+      - restore_sccache
       - restore_rust_cache
       - run:
           name: Install cargo tools
@@ -44,6 +81,7 @@ jobs:
             mkdir -p test-results
             RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time | cargo2junit > test-results/junit.xml
             cargo tarpaulin --out Xml --output-dir ./coverage --no-fail-fast --engine Llvm
+      - save_sccache
       - store_test_results:
           path: server/test-results
       - codecov/upload
