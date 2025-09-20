@@ -1,6 +1,6 @@
 import { describe, it, expect, Mock, vi, beforeEach, afterEach } from "vitest";
 import fetch from "node-fetch";
-import { UserGateKeeper, type Configuration } from "../src";
+import { UserGateKeeper } from "../dist";
 
 // Mock node-fetch
 vi.mock("node-fetch", () => {
@@ -12,7 +12,7 @@ vi.mock("node-fetch", () => {
 const mockedFetch = fetch as unknown as Mock;
 
 describe("UserGateKeeper.isAllowedEmail", () => {
-    const config: Configuration = {
+    const config = {
         baseUrl: "https://api.example.com",
         timeoutMs: 5000,
         token: "test-token",

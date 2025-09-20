@@ -10,4 +10,7 @@ export default defineConfig({
     outDir: 'dist', // Output directory
     target: 'node18', // Node.js version target
     external: ['node-fetch'],
+    minifySyntax: false,
+    minifyWhitespace: false,
+    minifyIdentifiers: false,
 });
