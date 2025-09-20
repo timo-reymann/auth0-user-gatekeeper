@@ -43,3 +43,4 @@ LABEL org.opencontainers.image.source="https://github.com/timo-reymann/auth0-use
 
 USER server
 ENTRYPOINT ["/bin/auth0-user-gatekeeper"]
+CMD ["--config", "/etc/auth0-user-gatekeeper/config.yml"]
