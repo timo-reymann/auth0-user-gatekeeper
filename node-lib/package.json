@@ -1,5 +1,9 @@
 {
   "name": "auth0-user-gatekeeper",
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/timo-reymann/auth0-user-gatekeeper.git"
+  },
   "version": "1.1.2",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -10,7 +14,10 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist/"],
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "type": "module",
   "scripts": {
     "build": "tsup src/index.ts",
