@@ -697,12 +697,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"auth0-user-gatekeeper@npm:^1.1.2, auth0-user-gatekeeper@workspace:.":
+"auth0-user-gatekeeper@workspace:.":
   version: 0.0.0-use.local
   resolution: "auth0-user-gatekeeper@workspace:."
   dependencies:
     "@vitest/coverage-v8": "npm:^3.2.4"
-    auth0-user-gatekeeper: "npm:^1.1.2"
     node-fetch: "npm:^3.3.2"
     tsup: "npm:^8.5.0"
     typescript: "npm:^5.9.2"
