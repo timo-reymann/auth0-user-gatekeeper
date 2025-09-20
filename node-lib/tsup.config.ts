@@ -13,4 +13,5 @@ export default defineConfig({
     minifySyntax: false,
     minifyWhitespace: false,
     minifyIdentifiers: false,
+    cjsInterop: true,
 });
