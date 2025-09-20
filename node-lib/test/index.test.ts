@@ -1,6 +1,6 @@
 import { describe, it, expect, Mock, vi, beforeEach, afterEach } from "vitest";
 import fetch from "node-fetch";
-import { UserGateKeeper } from "../dist";
+import { UserGateKeeper } from "../src";
 
 // Mock node-fetch
 vi.mock("node-fetch", () => {
