@@ -195,7 +195,7 @@ jobs:
               --api-key "$SCHEMA_NEST_UPLOAD_KEY" \
               --version "$CIRCLE_TAG" \
               --path server/config.schema.json \
-              --identifier python-binary-wheel-builder
+              --identifier auth0-user-gatekeeper
 
 workflows:
   version: 2
