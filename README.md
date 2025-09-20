@@ -117,7 +117,7 @@ You will have to create two actions for each tenant you want to use the gatekeep
     * @param {Event} event - Details about the context and user that is attempting to register.
     * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the signup.
     */
-    exports.onExecutePreUserRegistration = async (event, api) => {
+    exports.onExecutePostLogin = async (event, api) => {
       /** @type {UserGateKeeper} */
       const gatekeeper = new UserGateKeeper({
         baseUrl: "https://your-reverse-proxy.tld",
