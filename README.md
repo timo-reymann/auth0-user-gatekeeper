@@ -124,6 +124,11 @@ You will have to create two actions for each tenant you want to use the gatekeep
     * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the signup.
     */
     exports.onExecutePostLogin = async (event, api) => {
+      if(!event.user.email_verified) {
+        api.access.deny("E-Mail not verified")
+        return
+      }
+    
       /** @type {UserGateKeeper} */
       const gatekeeper = new UserGateKeeper({
         baseUrl: "https://your-reverse-proxy.tld",
@@ -150,3 +155,4 @@ You will have to create two actions for each tenant you want to use the gatekeep
 8. On the sidebar on the left click on `permit-only-allowed-mails-to-login`
 9. Drag it in the view after `Start`
 10. Click `Apply`
+ 
