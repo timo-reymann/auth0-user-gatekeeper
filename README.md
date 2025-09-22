@@ -138,7 +138,7 @@ You will have to create two actions for each tenant you want to use the gatekeep
       const { isAllowed } = await gatekeeper.isAllowedEmail(event.user.email);
     
       if (!isAllowed) {
-        api.access.deny("You are not allowed to register.")
+        api.access.deny("You are not allowed to login.")
       }
     };
     ```
