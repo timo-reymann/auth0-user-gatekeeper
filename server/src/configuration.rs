@@ -2,8 +2,10 @@ use notify::{Event, EventKind, RecursiveMode, Watcher};
 use serde::Deserialize;
 use std::fs;
 use std::path::Path;
+use std::process::exit;
 use std::sync::mpsc;
 use std::sync::mpsc::Sender;
+use log::info;
 use notify::event::{DataChange, ModifyKind};
 use validator::Validate;
 
@@ -58,7 +60,7 @@ pub async fn watch_config_updates(
     let mut watcher = notify::recommended_watcher(tx).unwrap();
     watcher.watch(path, RecursiveMode::NonRecursive).unwrap();
     for event in rx {
-        if event.unwrap().kind == EventKind::Modify(ModifyKind::Data(DataChange::Content)) {
+        if event.unwrap().kind == EventKind::Modify(ModifyKind::Data(DataChange::Any)) {
             sender.send(load_config(path.to_str().unwrap())).unwrap();
         }
     }
