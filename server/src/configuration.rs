@@ -1,5 +1,9 @@
-use std::{fs};
+use notify::{Event, RecursiveMode, Watcher};
 use serde::Deserialize;
+use std::fs;
+use std::path::Path;
+use std::sync::mpsc;
+use std::sync::mpsc::Sender;
 use validator::Validate;
 
 fn empty_string_vector() -> Vec<String> {
@@ -18,8 +22,16 @@ pub struct Config {
 
 impl Config {
     pub fn normalize(&mut self) {
-        self.allowed_domains = self.allowed_domains.iter().map(|d| d.to_lowercase()).collect();
-        self.allowed_mails = self.allowed_mails.iter().map(|m| m.to_lowercase()).collect();
+        self.allowed_domains = self
+            .allowed_domains
+            .iter()
+            .map(|d| d.to_lowercase())
+            .collect();
+        self.allowed_mails = self
+            .allowed_mails
+            .iter()
+            .map(|m| m.to_lowercase())
+            .collect();
     }
 }
 
@@ -29,12 +41,24 @@ pub struct EmailRequest {
     pub(crate) email: String,
 }
 
-pub fn load_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
+pub fn load_config(path: &str) -> Result<Config, Box<dyn std::error::Error + Send + Sync>> {
     let config_str = fs::read_to_string(path)?;
     let mut config: Config = serde_yaml::from_str(&config_str)?;
     config.validate()?;
     config.normalize();
     Ok(config)
+}
+
+pub async fn watch_config_updates(
+    path: &Path,
+    sender: Sender<Result<Config, Box<dyn std::error::Error + Send + Sync>>>,
+) {
+    let (tx, rx) = mpsc::channel::<notify::Result<Event>>();
+    let mut watcher = notify::recommended_watcher(tx).unwrap();
+    watcher.watch(path, RecursiveMode::NonRecursive).unwrap();
+    for _ in rx {
+        sender.send(load_config(path.to_str().unwrap())).unwrap();
+    }
 }
 
 #[cfg(test)]
@@ -80,7 +104,10 @@ token: SUPER_TOKEN
 
         let loaded = load_config(tmp.path().to_str().unwrap()).expect("config loads");
         assert_eq!(loaded.token, "SUPER_TOKEN");
-        assert_eq!(loaded.allowed_domains, vec!["example.com", "api.service.io"]);
+        assert_eq!(
+            loaded.allowed_domains,
+            vec!["example.com", "api.service.io"]
+        );
         assert_eq!(loaded.allowed_mails, vec!["user@one.org"]);
     }
 
