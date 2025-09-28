@@ -1,7 +1,11 @@
-use crate::app::create_app;
+use crate::app::{AppState, create_app};
 use crate::configuration;
+use crate::configuration::{Config, watch_config_updates};
 use clap::Parser;
 use std::net::SocketAddr;
+use std::sync::{Arc, Mutex};
+use std::{path::Path, sync::mpsc};
+use log::{error, info, warn};
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -21,22 +25,50 @@ pub async fn run(args: Args) -> i32 {
         }
     };
 
-    let app = create_app(config);
+    let shared_config = Arc::new(Mutex::new(config));
+    let config_for_watcher = Arc::clone(&shared_config);
+    let (config_updated, config_updates) =
+        mpsc::channel::<Result<Config, Box<dyn std::error::Error + Send + Sync>>>();
+
+    // Watcher for config updates
+    tokio::spawn(async move {
+        watch_config_updates(Path::new(args.config.as_str()), config_updated).await;
+    });
+
+    // Handler for config updates
+    tokio::spawn(async move {
+        for update in config_updates {
+            match update {
+                Ok(new_config) => {
+                    let mut config = config_for_watcher.lock().unwrap();
+                    *config = new_config;
+                    info!("Successfully updated config");
+                }
+                Err(e) => {
+                    warn!("Failed to parse config: {}", e);
+                }
+            }
+        }
+    });
+
+    let app = create_app(AppState {
+        config: shared_config,
+    });
 
     let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
     let socket = match tokio::net::TcpListener::bind(addr).await {
         Ok(l) => l,
         Err(e) => {
-            println!("Failed to bind to {}", e);
+            error!("Failed to bind to {}", e);
             return 1;
         }
     };
 
-    println!("Server listening on {}", addr);
+    info!("Server listening on {}", addr);
     match axum::serve(socket, app.into_make_service()).await {
         Ok(_) => 0,
         Err(e) => {
-            println!("Failed to serve {}", e);
+            error!("Failed to serve {}", e);
             1
         }
     }
@@ -86,7 +118,7 @@ mod tests {
         let token = "smoke-token";
         let args = Args {
             port,
-            config: "config.yaml".into(),
+            config: "fii.yaml".into(),
         };
 
         // Start server on the chosen port
@@ -105,7 +137,9 @@ mod tests {
             allowed_domains: vec!["smoke.com".into()],
             allowed_mails: vec!["user@other.com".into()],
         };
-        let app = crate::app::create_app(cfg);
+        let app = create_app(AppState{
+            config: Arc::new(Mutex::new(cfg.clone())),
+        });
 
         let req = HttpRequest::builder()
             .method("POST")
