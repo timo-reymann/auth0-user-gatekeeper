@@ -1,9 +1,10 @@
-use notify::{Event, RecursiveMode, Watcher};
+use notify::{Event, EventKind, RecursiveMode, Watcher};
 use serde::Deserialize;
 use std::fs;
 use std::path::Path;
 use std::sync::mpsc;
 use std::sync::mpsc::Sender;
+use notify::event::{DataChange, ModifyKind};
 use validator::Validate;
 
 fn empty_string_vector() -> Vec<String> {
@@ -56,8 +57,10 @@ pub async fn watch_config_updates(
     let (tx, rx) = mpsc::channel::<notify::Result<Event>>();
     let mut watcher = notify::recommended_watcher(tx).unwrap();
     watcher.watch(path, RecursiveMode::NonRecursive).unwrap();
-    for _ in rx {
-        sender.send(load_config(path.to_str().unwrap())).unwrap();
+    for event in rx {
+        if event.unwrap().kind == EventKind::Modify(ModifyKind::Data(DataChange::Content)) {
+            sender.send(load_config(path.to_str().unwrap())).unwrap();
+        }
     }
 }
 
