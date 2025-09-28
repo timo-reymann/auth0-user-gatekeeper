@@ -1,5 +1,5 @@
 ### GET request to example server
-POST http://localhost:3000/isAllowed
+POST http://localhost:2025/isAllowed
 Content-Type: application/json
 Authorization: Bearer 3da211b4-4906-4e1a-b516-cdb72bade059
 

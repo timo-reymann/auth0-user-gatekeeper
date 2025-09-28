@@ -1,3 +1,4 @@
+use std::sync::{Arc, Mutex};
 use axum::extract::State;
 use axum::http::{HeaderMap, StatusCode};
 use axum::{Json, Router};
@@ -6,17 +7,24 @@ use axum::routing::post;
 use validator::Validate;
 use crate::configuration::{Config, EmailRequest};
 
-pub fn create_app(config: Config) -> Router {
+#[derive(Clone, Debug)]
+pub struct AppState {
+    pub(crate) config: Arc<Mutex<Config>>
+}
+
+pub fn create_app(config: AppState) -> Router {
     Router::new()
         .route("/isAllowed", post(check_allowed_by_mail))
         .with_state(config)
 }
 
 async fn check_allowed_by_mail(
-    State(config): State<Config>,
+    State(app_state): State<AppState>,
     headers: HeaderMap,
     Json(payload): Json<EmailRequest>,
 ) -> impl IntoResponse {
+    let config = app_state.config.lock().unwrap();
+
     // Check auth header
     if !headers.contains_key("authorization") {
         return (StatusCode::UNAUTHORIZED, "no_token").into_response();
@@ -66,7 +74,9 @@ mod tests {
             token: "tkn".into(),
         };
 
-        let app = create_app(cfg.clone());
+        let app = create_app(AppState{
+            config: Arc::new(Mutex::new(cfg.clone())),
+        });
 
         // Route exists and responds (we only check that handler is wired).
         // We don't assert handler logic here, just that the route is present and callable.
@@ -99,7 +109,9 @@ mod tests {
             allowed_mails: vec![],
             token: "tkn".into(),
         };
-        let app = create_app(cfg);
+        let app = create_app(AppState{
+            config: Arc::new(Mutex::new(cfg.clone())),
+        });
 
         // Unknown route should be 404
         let request = Request::builder()
@@ -118,7 +130,9 @@ mod tests {
             allowed_mails: vec!["special@allowed.com".into(), "exact@other.org".into()],
             token: "secret".into(),
         };
-        create_app(cfg)
+        create_app(AppState{
+            config: Arc::new(Mutex::new(cfg.clone())),
+        })
     }
 
     async fn call_is_allowed(email: &str, token: Option<&str>) -> (StatusCode, String) {
