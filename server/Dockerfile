@@ -26,7 +26,7 @@ FROM cgr.dev/chainguard/wolfi-base
 RUN adduser -D server \
     && mkdir -p /etc/auth0-user-gatekeeper \
     && chown server:server /etc/auth0-user-gatekeeper
-
+RUN apk add --no-cache tini
 COPY --from=builder \
      --chown=server:server \
      /usr/src/app/target/release/auth0-user-gatekeeper /bin/auth0-user-gatekeeper
@@ -42,5 +42,5 @@ LABEL org.opencontainers.image.documentation="https://github.com/timo-reymann/au
 LABEL org.opencontainers.image.source="https://github.com/timo-reymann/auth0-user-gatekeeper.git"
 
 USER server
-ENTRYPOINT ["/bin/auth0-user-gatekeeper"]
+ENTRYPOINT ["tini", "--", "/bin/auth0-user-gatekeeper"]
 CMD ["--config", "/etc/auth0-user-gatekeeper/config.yml"]
