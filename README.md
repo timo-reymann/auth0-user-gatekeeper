@@ -29,6 +29,11 @@ It allows maintaining the allow list for mails and domains outside the auth0 ten
     - part of your tenant
     - created and maintained by you per tenant
 
+## Features
+
+- Admit users based on an explicit mail address or domain
+- Reload configuration at runtime without a restart (failures in config will be logged; but not reloaded)
+
 ## Usage
 
 Set up is a straightforward as 1-2-3.
