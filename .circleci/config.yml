@@ -184,7 +184,7 @@ jobs:
             yarn npm publish --access public
   upload-config-schema:
     docker:
-      - image: timoreymann/schemanest-cli:v0.7.40
+      - image: timoreymann/schemanest-cli:v0.7.41
     steps:
       - checkout
       - run:
