@@ -100,7 +100,7 @@ jobs:
               <<parameters.buildx_extra_args>>
   test-server:
     docker:
-      - image: cimg/rust:1.92.0
+      - image: cimg/rust:1.93.0
     steps:
       - checkout
       - install_sccache
