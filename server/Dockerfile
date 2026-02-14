@@ -31,7 +31,8 @@ COPY --from=builder \
      --chown=server:server \
      /usr/src/app/target/release/auth0-user-gatekeeper /bin/auth0-user-gatekeeper
 
-LABEL org.opencontainers.image.title="auth0-user-gatekeeper"
+LABEL 
+LABEL org.opencontainers.image.licenses="unlicense"org.opencontainers.image.title="auth0-user-gatekeeper"
 LABEL org.opencontainers.image.description="Admit users to applications through auth0 based on mail address"
 LABEL org.opencontainers.image.ref.name="main"
 LABEL org.opencontainers.image.licenses='Unlicense'
