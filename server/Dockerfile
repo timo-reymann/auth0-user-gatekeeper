@@ -1,3 +1,7 @@
+FROM scratch AS license
+COPY LICENSE LICENSE
+COPY NOTICE NOTICE
+
 FROM rust:1.93-bookworm AS builder
 
 ARG SCCACHE_VERSION=0.10.0
@@ -23,6 +27,7 @@ RUN --mount=type=cache,target=/root/.cargo,id=cargo \
     cargo build --release
 
 FROM cgr.dev/chainguard/wolfi-base
+COPY --from=license / /
 RUN adduser -D server \
     && mkdir -p /etc/auth0-user-gatekeeper \
     && chown server:server /etc/auth0-user-gatekeeper
