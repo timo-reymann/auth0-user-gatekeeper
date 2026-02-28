@@ -14,4 +14,4 @@ jobs:
   license-check:
     uses: timo-reymann/.github/.github/workflows/ort.yml@main
     with:
-      ort-analyze-args: -P ort.analyzer.enabledPackageManagers=- Yarn2
+      ort-analyze-args: --enabled-package-managers Cargo
