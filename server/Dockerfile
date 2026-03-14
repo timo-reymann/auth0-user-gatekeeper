@@ -1,7 +1,3 @@
-FROM scratch AS license
-COPY LICENSE LICENSE
-COPY NOTICE NOTICE
-
 FROM rust:1.93-bookworm AS builder
 
 ARG SCCACHE_VERSION=0.10.0
