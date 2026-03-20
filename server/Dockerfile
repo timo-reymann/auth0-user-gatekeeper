@@ -23,7 +23,6 @@ RUN --mount=type=cache,target=/root/.cargo,id=cargo \
     cargo build --release
 
 FROM cgr.dev/chainguard/wolfi-base
-COPY --from=license / /
 RUN adduser -D server \
     && mkdir -p /etc/auth0-user-gatekeeper \
     && chown server:server /etc/auth0-user-gatekeeper
