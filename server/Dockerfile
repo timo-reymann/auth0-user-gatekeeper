@@ -26,21 +26,24 @@ FROM cgr.dev/chainguard/wolfi-base
 RUN adduser -D server \
     && mkdir -p /etc/auth0-user-gatekeeper \
     && chown server:server /etc/auth0-user-gatekeeper
+
 RUN apk add --no-cache tini
+
 COPY --from=builder \
      --chown=server:server \
      /usr/src/app/target/release/auth0-user-gatekeeper /bin/auth0-user-gatekeeper
 
-LABEL org.opencontainers.image.title="auth0-user-gatekeeper"
-LABEL org.opencontainers.image.description="Admit users to applications through auth0 based on mail address"
-LABEL org.opencontainers.image.ref.name="main"
-LABEL org.opencontainers.image.licenses='Unlicense'
-LABEL org.opencontainers.image.vendor="Timo Reymann <mail@timo-reymann.de>"
-LABEL org.opencontainers.image.authors="Timo Reymann <mail@timo-reymann.de>"
-LABEL org.opencontainers.image.url="https://github.com/timo-reymann/auth0-user-gatekeeper"
-LABEL org.opencontainers.image.documentation="https://github.com/timo-reymann/auth0-user-gatekeeper"
-LABEL org.opencontainers.image.source="https://github.com/timo-reymann/auth0-user-gatekeeper.git"
+LABEL org.opencontainers.image.title="auth0-user-gatekeeper" \
+      org.opencontainers.image.description="Admit users to applications through auth0 based on mail address" \
+      org.opencontainers.image.ref.name="main" \
+      org.opencontainers.image.licenses='Unlicense' \
+      org.opencontainers.image.vendor="Timo Reymann <mail@timo-reymann.de>" \
+      org.opencontainers.image.authors="Timo Reymann <mail@timo-reymann.de>" \
+      org.opencontainers.image.url="https://github.com/timo-reymann/auth0-user-gatekeeper" \
+      org.opencontainers.image.documentation="https://github.com/timo-reymann/auth0-user-gatekeeper" \
+      org.opencontainers.image.source="https://github.com/timo-reymann/auth0-user-gatekeeper.git"
 
 USER server
+
 ENTRYPOINT ["tini", "--", "/bin/auth0-user-gatekeeper"]
 CMD ["--config", "/etc/auth0-user-gatekeeper/config.yml"]
