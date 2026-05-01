@@ -1,4 +1,4 @@
-FROM rust:1.94-bookworm AS builder
+FROM rust:1.95-bookworm AS builder
 
 ARG SCCACHE_VERSION=0.10.0
 ENV SCCACHE_DIR=/root/.cache/sccache
