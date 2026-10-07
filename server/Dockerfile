@@ -15,12 +15,12 @@ RUN --mount=type=cache,target=/root/.cargo,id=cargo \
     --mount=type=bind,source=src/main.rs,target=src/main.rs \
     --mount=type=bind,source=Cargo.toml,target=Cargo.toml \
     --mount=type=bind,source=Cargo.lock,target=Cargo.lock \
-    cargo fetch
+    cargo fetch --locked
 
 COPY . ./
 RUN --mount=type=cache,target=/root/.cargo,id=cargo \
     --mount=type=cache,target=/root/.cache/sccache,id=sccache \
-    cargo build --release
+    cargo build --release --locked
 
 FROM cgr.dev/chainguard/wolfi-base
 RUN adduser -D server \
