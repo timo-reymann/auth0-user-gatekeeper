@@ -70,18 +70,24 @@ package_configurations:
         reason: BUILD_TOOL_OF
         comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
 
-  # Benchmark corpora: the Intel 80386 reference manual and sample book texts are
-  # detected as proprietary and Project Gutenberg licenses respectively.
+  # Benchmark corpora: the Intel 80386 reference manual and a sampled OpenSubtitles
+  # text are detected as a proprietary license. Only those findings are curated, so
+  # the Project Gutenberg license detected in the Sherlock Holmes haystacks stays
+  # part of the reported licenses and of the generated NOTICE.
   - id: "Crate::aho-corasick"
-    path_excludes:
-      - pattern: "benchmarks/**"
-        reason: DATA_FILE_OF
-        comment: "Benchmark haystacks are not distributed with the crate."
+    license_finding_curations:
+      - path: "benchmarks/haystacks/opensubtitles/en-sampled.txt"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "NONE"
+        reason: INCORRECT
+        comment: "False positive: prose in a benchmark corpus, not a license of the crate."
   - id: "Crate::memchr"
-    path_excludes:
-      - pattern: "benchmarks/**"
-        reason: DATA_FILE_OF
-        comment: "Benchmark haystacks are not distributed with the crate."
+    license_finding_curations:
+      - path: "benchmarks/haystacks/sliceslice/i386.txt"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "NONE"
+        reason: INCORRECT
+        comment: "False positive: copyright notice of the Intel 80386 reference manual in a benchmark corpus, not a license of the crate."
 
   # Shipped code, so the finding is curated rather than excluded. The file header
   # comment 'For terms of use, please see the file called LICENSE' is detected as a
