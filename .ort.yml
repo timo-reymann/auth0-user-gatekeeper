@@ -1,3 +1,176 @@
 analyzer:
   enabled_package_managers:
     - Cargo
+
+# The scanner checks out the full upstream repository of each dependency instead of
+# only the published crate, which surfaces license text in files that are never
+# distributed. The entries below correct those false positives. Findings that live
+# in shipped code are curated instead of excluded.
+package_configurations:
+  # cargo-deny configuration; "[licenses.private]" is detected as a proprietary
+  # license. Not part of the published crates.
+  - id: "Crate::anstream"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::anstyle"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::anstyle-query"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::anstyle-wincon"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::clap"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::clap_builder"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::clap_derive"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::colorchoice"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::is_terminal_polyfill"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::once_cell_polyfill"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::proc-macro-error-attr3"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+  - id: "Crate::proc-macro-error3"
+    path_excludes:
+      - pattern: "deny.toml"
+        reason: BUILD_TOOL_OF
+        comment: "cargo-deny config file; the word 'private' triggers a proprietary-license false positive."
+
+  # Benchmark corpora: the Intel 80386 reference manual and sample book texts are
+  # detected as proprietary and Project Gutenberg licenses respectively.
+  - id: "Crate::aho-corasick"
+    path_excludes:
+      - pattern: "benchmarks/**"
+        reason: DATA_FILE_OF
+        comment: "Benchmark haystacks are not distributed with the crate."
+  - id: "Crate::memchr"
+    path_excludes:
+      - pattern: "benchmarks/**"
+        reason: DATA_FILE_OF
+        comment: "Benchmark haystacks are not distributed with the crate."
+
+  # Shipped code, so the finding is curated rather than excluded. The file header
+  # comment 'For terms of use, please see the file called LICENSE' is detected as a
+  # proprietary license.
+  - id: "Crate::icu_collections"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::icu_locale_core"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::icu_normalizer"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::icu_normalizer_data"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::icu_properties"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::icu_properties_data"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::icu_provider"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::potential_utf"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::writeable"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::zerotrie"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+  - id: "Crate::zerovec"
+    license_finding_curations:
+      - path: "components/locale_core/src/extensions/private/mod.rs"
+        detected_license: "LicenseRef-scancode-proprietary-license"
+        concluded_license: "Unicode-3.0"
+        reason: INCORRECT
+        comment: "False positive: matches the 'terms of use ... LICENSE' file header comment."
+
+  # AUTHORS states the triple licence in prose; the scanner misparses
+  # 'Apache License, Version 2.0, and the GNU Lesser General Public License' as
+  # 'Apache-2.0 OR GPL-2.0-or-later'.
+  - id: "Crate::r-efi"
+    license_finding_curations:
+      - path: "AUTHORS"
+        detected_license: "Apache-2.0 OR GPL-2.0-or-later"
+        concluded_license: "MIT OR Apache-2.0 OR LGPL-2.1-or-later"
+        reason: INCORRECT
+        comment: "False positive: the AUTHORS file states the triple licence MIT OR Apache-2.0 OR LGPL-2.1-or-later."
