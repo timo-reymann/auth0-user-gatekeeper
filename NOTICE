@@ -4884,7 +4884,7 @@ Copyright (c) 2018 Carl Lerche
 
 Package: cfg-if:1.0.3
 
-This package contains the file LICENSE-MIT with the following contents:
+This package contains the file cfg-if-1.0.3/LICENSE-MIT with the following contents:
 
 Copyright (c) 2014 Alex Crichton
 
@@ -4916,7 +4916,7 @@ The following copyright holder information relates to the license(s) above:
 
 Copyright (c) 2014 Alex Crichton
 
-This package contains the file LICENSE-APACHE with the following contents:
+This package contains the file cfg-if-1.0.3/LICENSE-APACHE with the following contents:
 
                               Apache License
                         Version 2.0, January 2004
@@ -34556,7 +34556,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Package: redox_syscall:0.5.17
 
-This package contains the file LICENSE with the following contents:
+This package contains the file redox_syscall-0.5.17/LICENSE with the following contents:
 
 Copyright (c) 2017 Redox OS Developers
 
@@ -38299,7 +38299,7 @@ END OF TERMS AND CONDITIONS
 
 ----
 
-Package: serde_json:1.0.145
+Package: serde_json:1.0.154
 
 This package contains the file LICENSE-MIT with the following contents:
 
@@ -73778,3 +73778,33 @@ authorization of the copyright holder.
 Unicode and the Unicode logo are trademarks of Unicode, Inc., and may be
 registered in some jurisdictions. All other trademarks and registered
 trademarks mentioned herein are the property of their respective owners.
+----
+
+Package: zmij:1.0.23
+
+This package contains the file LICENSE-MIT with the following contents:
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
